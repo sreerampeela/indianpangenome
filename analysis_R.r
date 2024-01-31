@@ -50,3 +50,19 @@ ggplot(data=df_gpsc10_most, aes(x=num_vfs, y=term.name, size = gpsc10_prop)) +
   xlab("Number of virulence genes") + ylab("GO Term") + scale_size(name="Proportion") +  
   scale_x_continuous(breaks=c(0:10), 
                      labels=c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"))
+
+
+## for COG categories
+df <- read.xlsx("eggNOG_ann.xlsx", header = T, sheetName = "COG_categories")
+df_prop <- select(df, c("Category", "coreGenome_z",	"shellGenome_z",	"cloudGenome_z"))
+colnames(df_prop) <- c("Category", "Core genome", "shell genome", "cloud genome")
+dfmelt <- melt(df_prop)
+dfmelt <- na.omit(dfmelt)
+ggplot(data=dfmelt, aes(x=variable, y=Category, size = value, color = variable, 
+                        transparency = 0.6))+geom_point()
+
+ggplot(data=dfmelt, aes(x=variable, y=Category))+
+  geom_tile(aes (fill = value), colour = "white")+
+  scale_fill_gradient(low = "#c2bbae", high = "#1f06a0")+
+  xlab("Genome compartment")
+  
